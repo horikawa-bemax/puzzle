@@ -11,7 +11,6 @@ import android.support.v4.app.NavUtils;
 
 public class MainActivity extends Activity {
 	private SurfaceView puzView;
-	private Resources res;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,7 +19,6 @@ public class MainActivity extends Activity {
         
         /* ここから入力 */
         puzView = (SurfaceView)findViewById(R.id.puzzle_view);
-        res = puzView.getResources();
         Puzzle puzzle = new Puzzle(puzView);
         
     }
