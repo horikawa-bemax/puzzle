@@ -77,7 +77,6 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// TODO スレッドを終了させる
 		loop = false;
-		this.stop();
 	}
 
 	@Override
