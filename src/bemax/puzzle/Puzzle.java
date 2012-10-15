@@ -6,7 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
+import android.graphics.Bitmap.Config;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,11 +16,12 @@ import android.view.View.OnTouchListener;
 public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchListener{
 	private SurfaceView puzView;
 	private SurfaceHolder holder;
-	private Rect viewRect, picRect;
+	private Rect puzRect, picRect;
 	private boolean loop, touch;
-	private Bitmap picture;
-	private Panel[] panels;
-	private int startX, startY, oldX, oldY, column, row, num;
+	private Bitmap picture, puzpic;
+	private Panel[] panels, map;
+	private int startX, startY, num, dx, dy;
+	private int quat, blank;
 
 	public Puzzle(SurfaceView v){
 		puzView = v;
@@ -30,6 +31,9 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 
 		picture = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.picture);
 		picRect = new Rect(0, 0, picture.getWidth(), picture.getHeight());
+		
+		panels = new Panel[16];
+		map = new Panel[16];
 	}
 
 	public void run(){
@@ -37,151 +41,141 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		frame_paint.setColor(Color.BLACK);
 		frame_paint.setStyle(Paint.Style.STROKE);
 
-		panels = new Panel[16];
-		for(int i=0; i<16; i++){
-			panels[i] = new Panel(i, picture);
+		for(int i=0; i<panels.length-1; i++){
+			Bitmap bmp = Bitmap.createBitmap(puzpic, i%4*quat, i/4*quat, quat, quat);
+			panels[i] = new Panel(i, bmp);
+			map[i] = panels[i];
 		}
-
-		Rect r = new Rect(0, 0, 120, 120);
+		blank = 15;
+		
+		Rect r = new Rect(0, 0, quat, quat);
 
 		while(loop){
 			Canvas canvas = holder.lockCanvas();
 			canvas.drawColor(Color.WHITE);
 
-			for(int i=0; i<panels.length; i++){
-				if(panels[i].getNum()==15) continue;
-				canvas.drawBitmap(panels[i].getImage(), r, panels[i].getRect(), null);
+			for(int i=0; i<map.length; i++){
+				if(i==blank){
+					continue;
+				}
+				if(map[i].getMove() && num==i){
+					canvas.drawBitmap(map[i].getImage(), i%4*quat + dx, i/4*quat + dy, null);
+				}else{
+					canvas.drawBitmap(map[i].getImage(), i%4*quat, i/4*quat, null);
+				}
 			}
 
-			canvas.drawRect(picRect, frame_paint);
+			canvas.drawRect(puzRect.left, puzRect.top, puzRect.right-1, puzRect.bottom-1, frame_paint);
 
 			holder.unlockCanvasAndPost(canvas);
 		}
 	}
 
-	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		// TODO 変更されたviewの幅と高さに合わせる
-		viewRect = new Rect(0, 0, width, height);
-		Log.d("create_view",""+width+":"+height);
-	}
-
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		// TODO スレッドを作成する
-		loop = true;
+		if(width<height){
+			quat = width / 4;
+		}else{
+			quat = height / 4;
+		}
+		
+		puzRect = new Rect(0, 0, quat*4, quat*4);
+		puzpic = Bitmap.createBitmap(puzRect.width(), puzRect.height(), Config.ARGB_8888);
+		Canvas c = new Canvas(puzpic);
+		c.drawBitmap(picture, picRect, puzRect, null);
+		
 		this.start();
 	}
 
-	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
+		// TODO スレッドを作成する
+		loop = true;
+	}
+
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// TODO スレッドを終了させる
 		loop = false;
 	}
 
-	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		// TODO 画面にタッチされた時の処理を書く
-		int dx, dy;
 		int x = (int)event.getX();
 		int y = (int)event.getY();
-		if(!picRect.contains(x, y)){
-			return false;
-		}
 
 		switch(event.getAction()){
 		case MotionEvent.ACTION_DOWN:
-			startX = oldX = x;
-			startY = oldY = y;
-			column = startX / 120;
-			row = startY / 120;
-			num = row*4+column;
-			if(panels[num].getNum()==15){
-				touch = false;
+			startX = x;
+			startY = y;
+			int c = x / quat;
+			int r = y / quat;
+			num = r * 4 + c;
+			if(num>=0 && num < 16 && num!=blank && (num-4==blank || num+1==blank || num+4==blank || num-1==blank)){
+				map[num].setMove(true);
+				dx = dy = 0;
+				touch = true;	
 			}else{
-				touch = true;
+				touch = false;
 			}
 			break;
 		case MotionEvent.ACTION_MOVE:
-			if(row>0 && panels[num-4].getNum()==15){
-				if(y>startY){
-					y = startY;
+			if(map[num].getMove()){
+				if(num/4>0 && num-4==blank){
+					if(y>startY){
+						y = startY;
+					}
+					if(y<startY-quat){
+						y = startY - quat;
+					}
+					dx = 0;
+					dy = y - startY;
+				}else	if(num%4<3  && num+1==blank){
+					if(x<startX){
+						x = startX;
+					}
+					if(x>startX + quat){
+						x = startX + quat;
+					}
+					dx = x - startX;
+					dy = 0;
+				}else	if(num/4<3 && num+4==blank){
+					if(y<startY){
+						y = startY;
+					}
+					if(y>startY + quat){
+						y = startY + quat;
+					}
+					dx = 0;
+					dy = y - startY;
+				}else if(num%4>0 && num-1==blank){
+					if(x>startX){
+						x = startX;
+					}
+					if(x<startX - quat){
+						x = startX - quat;
+					}
+					dx = x - startX;
+					dy = 0;
 				}
-				if(y<startY-120){
-					y = startY - 120;
-				}
-				dy = y - oldY;
-				panels[num].getRect().offset(0, dy);
 			}
-			if(column<3 && panels[num+1].getNum()==15){
-				if(x<startX){
-					x = startX;
-				}
-				if(x>startX + 120){
-					x = startX + 120;
-				}
-				dx = x - oldX;
-				panels[num].getRect().offset(dx, 0);
-			}
-			if(row<3 && panels[num+4].getNum()==15){
-				if(y<startY){
-					y = startY;
-				}
-				if(y>startY + 120){
-					y = startY + 120;
-				}
-				dy = y - oldY;
-				panels[num].getRect().offset(0, dy);
-			}
-			if(column>0 && panels[num-1].getNum()==15){
-				if(x>startX){
-					x = startX;
-				}
-				if(x<startX - 120){
-					x = startX - 120;
-				}
-				dx = x - oldX;
-				panels[num].getRect().offset(dx, 0);
-			}
-			oldX = x;
-			oldY = y;
 			break;
 		case MotionEvent.ACTION_UP:
-			int cx = panels[num].getRect().centerX();
-			int cy = panels[num].getRect().centerY();
-			if(column == cx / 120 && row == cy / 120){
-				panels[num].resetRect(column, row);
-			}
-			if(row > cy / 120){
-				Panel p = panels[num];
-				p.moveUp();
-				panels[num-4].moveDown();
-				panels[num] = panels[num-4];
-				panels[num-4] = p;
-			}
-			if(column < cx / 120){
-				Panel p = panels[num];
-				p.moveRight();
-				panels[num+1].moveLeft();
-				panels[num] = panels[num+1];
-				panels[num+1] = p;
-			}
-			if(row < cy / 120){
-				Panel p = panels[num];
-				p.moveDown();
-				panels[num+4].moveUp();
-				panels[num] = panels[num+4];
-				panels[num+4] = p;
-			}
-			if(column > cx / 120){
-				Panel p = panels[num];
-				p.moveLeft();
-				panels[num-1].moveRight();
-				panels[num] = panels[num-1];
-				panels[num-1] = p;
+			int xx = startX + dx;
+			int yy = startY + dy;
+			int a = yy/quat*4+xx/quat;
+			map[num].setMove(false);
+			if(a==blank){
+				swap(num, a);
+				blank = num;
 			}
 			touch = false;
 		}
 		return touch;
+	}
+	
+	void swap(int a, int b){
+		Panel p;
+		p = map[a];
+		map[a] = map[b];
+		map[b] = p;
 	}
 }
