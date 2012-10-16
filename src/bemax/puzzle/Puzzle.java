@@ -31,7 +31,7 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 
 		picture = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.picture);
 		picRect = new Rect(0, 0, picture.getWidth(), picture.getHeight());
-		
+
 		panels = new Panel[16];
 		map = new Panel[16];
 	}
@@ -47,7 +47,7 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 			map[i] = panels[i];
 		}
 		blank = 15;
-		
+
 		Rect r = new Rect(0, 0, quat, quat);
 
 		while(loop){
@@ -78,12 +78,12 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		}else{
 			quat = height / 4;
 		}
-		
+
 		puzRect = new Rect(0, 0, quat*4, quat*4);
 		puzpic = Bitmap.createBitmap(puzRect.width(), puzRect.height(), Config.ARGB_8888);
 		Canvas c = new Canvas(puzpic);
 		c.drawBitmap(picture, picRect, puzRect, null);
-		
+
 		this.start();
 	}
 
@@ -112,7 +112,7 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 			if(num>=0 && num < 16 && num!=blank && (num-4==blank || num+1==blank || num+4==blank || num-1==blank)){
 				map[num].setMove(true);
 				dx = dy = 0;
-				touch = true;	
+				touch = true;
 			}else{
 				touch = false;
 			}
@@ -171,7 +171,7 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		}
 		return touch;
 	}
-	
+
 	void swap(int a, int b){
 		Panel p;
 		p = map[a];
