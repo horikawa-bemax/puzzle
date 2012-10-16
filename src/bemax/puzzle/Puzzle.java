@@ -1,5 +1,7 @@
 package bemax.puzzle;
 
+import java.util.Random;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,25 +14,33 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 
 public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchListener{
 	private SurfaceView puzView;
 	private SurfaceHolder holder;
-	private Rect puzRect, picRect;
+	private Rect puzRect, picRect, markRect;
 	private boolean loop, touch;
-	private Bitmap picture, puzpic;
+	private Bitmap picture, puzpic, mark;
 	private Panel[] panels, map;
 	private int startX, startY, num, dx, dy;
-	private int quat, blank;
+	private int quat, blank, btnState;
+	private Button button;
+	private boolean visible;
 
-	public Puzzle(SurfaceView v){
+	public Puzzle(SurfaceView v, Button b){
 		puzView = v;
+		button = b;
 		holder = puzView.getHolder();
 		holder.addCallback(this);
 		puzView.setOnTouchListener(this);
+		button.setText("START");
 
 		picture = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.picture);
 		picRect = new Rect(0, 0, picture.getWidth(), picture.getHeight());
+
+		mark = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.mark);
+		markRect = new Rect(0, 0, mark.getWidth(), mark.getHeight());
 
 		panels = new Panel[16];
 		map = new Panel[16];
@@ -41,20 +51,19 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		frame_paint.setColor(Color.BLACK);
 		frame_paint.setStyle(Paint.Style.STROKE);
 
-		for(int i=0; i<panels.length-1; i++){
-			Bitmap bmp = Bitmap.createBitmap(puzpic, i%4*quat, i/4*quat, quat, quat);
-			panels[i] = new Panel(i, bmp);
-			map[i] = panels[i];
-		}
-		blank = 15;
+		Paint back_paint = new Paint();
+		back_paint.setAlpha(64);
+
+		init();
 
 		Rect r = new Rect(0, 0, quat, quat);
 
 		while(loop){
 			Canvas canvas = holder.lockCanvas();
 			canvas.drawColor(Color.WHITE);
+			canvas.drawBitmap(mark, markRect, puzRect, back_paint);
 
-			for(int i=0; i<map.length; i++){
+			for(int i=0; visible &&  i<map.length; i++){
 				if(i==blank){
 					continue;
 				}
@@ -83,6 +92,9 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		puzpic = Bitmap.createBitmap(puzRect.width(), puzRect.height(), Config.ARGB_8888);
 		Canvas c = new Canvas(puzpic);
 		c.drawBitmap(picture, picRect, puzRect, null);
+
+		button.setText("RESET");
+		btnState = 1;
 
 		this.start();
 	}
@@ -177,5 +189,50 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		p = map[a];
 		map[a] = map[b];
 		map[b] = p;
+	}
+
+	void init(){
+		visible = false;
+		for(int i=0; i<panels.length-1; i++){
+			Bitmap bmp = Bitmap.createBitmap(puzpic, i%4*quat, i/4*quat, quat, quat);
+			panels[i] = new Panel(i, bmp);
+			map[i] = panels[i];
+		}
+		blank = 15;
+
+		Random rd = new Random();
+		for(int i=0; true; i++){
+			if(i>200 && blank==15){
+				break;
+			}
+			int rn = rd.nextInt(4);
+			switch(rn){
+			case 0:
+				if(blank/4>0){
+					swap(blank, blank-4);
+					blank = blank - 4;
+				}
+				break;
+			case 1:
+				if(blank%4<3){
+					swap(blank, blank+1);
+					blank = blank + 1;
+				}
+				break;
+			case 2:
+				if(blank/4<3){
+					swap(blank, blank+4);
+					blank = blank + 4;
+				}
+				break;
+			case 3:
+				if(blank%4>0){
+					swap(blank, blank-1);
+					blank = blank - 1;
+				}
+				break;
+			}
+		}
+		visible = true;
 	}
 }
