@@ -24,17 +24,17 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 	private Bitmap picture, puzpic, mark;
 	private Panel[] panels, map;
 	private int startX, startY, num, dx, dy;
-	private int quat, blank, btnState;
-	private Button button;
+	private int quat, blank, mode;
 	private boolean visible;
+	static final int INIT = 0;
+	static final int MOVE = 1;
+	static final int COMP = 2;
 
-	public Puzzle(SurfaceView v, Button b){
+	public Puzzle(SurfaceView v){
 		puzView = v;
-		button = b;
 		holder = puzView.getHolder();
 		holder.addCallback(this);
 		puzView.setOnTouchListener(this);
-		button.setText("START");
 
 		picture = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.picture);
 		picRect = new Rect(0, 0, picture.getWidth(), picture.getHeight());
@@ -44,6 +44,8 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 
 		panels = new Panel[16];
 		map = new Panel[16];
+		
+		mode = INIT;
 	}
 
 	public void run(){
@@ -53,8 +55,6 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 
 		Paint back_paint = new Paint();
 		back_paint.setAlpha(64);
-
-		init();
 
 		Rect r = new Rect(0, 0, quat, quat);
 
@@ -93,9 +93,8 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		Canvas c = new Canvas(puzpic);
 		c.drawBitmap(picture, picRect, puzRect, null);
 
-		button.setText("RESET");
-		btnState = 1;
-
+		init();
+		
 		this.start();
 	}
 
@@ -192,14 +191,17 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 	}
 
 	void init(){
-		visible = false;
 		for(int i=0; i<panels.length-1; i++){
 			Bitmap bmp = Bitmap.createBitmap(puzpic, i%4*quat, i/4*quat, quat, quat);
 			panels[i] = new Panel(i, bmp);
 			map[i] = panels[i];
 		}
 		blank = 15;
-
+		visible = true;
+	}
+	
+	void shuffle(){
+		visible = false;
 		Random rd = new Random();
 		for(int i=0; true; i++){
 			if(i>200 && blank==15){
@@ -234,5 +236,13 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 			}
 		}
 		visible = true;
+	}
+	
+	int getMode(){
+		return mode;
+	}
+	
+	void setMode(int m){
+		mode = m;
 	}
 }

@@ -17,13 +17,11 @@ public class MainActivity extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         /* ここから入力 */
         puzView = (SurfaceView)findViewById(R.id.puzzle_view);
         button = (Button)findViewById(R.id.reset_button);
+        puzzle = new Puzzle(puzView);
         button.setOnClickListener(this);
-
-        puzzle = new Puzzle(puzView, button);
     }
 
     @Override
@@ -34,8 +32,6 @@ public class MainActivity extends Activity implements OnClickListener{
 
 	public void onClick(View v) {
 		// TODO 自動生成されたメソッド・スタブ
-		puzzle.init();
+		puzzle.shuffle();
 	}
-
-
 }

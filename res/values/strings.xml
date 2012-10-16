@@ -5,5 +5,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="author">Masaaki Horikawa</string>
     <string name="bemax_title">専門学校ビーマックス</string>
+    <string name="shuffle_btn">SHUFFLE</string>
 
 </resources>

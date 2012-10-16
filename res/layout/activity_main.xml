@@ -27,14 +27,14 @@
             android:layout_weight="0"
             android:adjustViewBounds="true"
             android:src="@drawable/picture" />
-
+
         <Button
             android:id="@+id/reset_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:text="リセット" />
+            android:text="@string/shuffle_btn" />
 
     </LinearLayout>
 
