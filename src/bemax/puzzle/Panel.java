@@ -11,7 +11,7 @@ class Panel {
 	private Bitmap image;
 	private final Rect rect;
 	private boolean move;
-	
+
 	public Panel(int n, Bitmap img){
 		num = n;
 		image = img;
@@ -24,16 +24,20 @@ class Panel {
 		paint.setStyle(Paint.Style.STROKE);
 		canvas.drawRect(rect.left, rect.top, rect.right-1, rect.bottom-1, paint);
 	}
-	
+
 	Bitmap getImage(){
 		return image;
 	}
-	
+
 	void setMove(boolean b){
 		move= b;
 	}
-	
+
 	boolean getMove(){
 		return move;
+	}
+
+	int getNum(){
+		return num;
 	}
 }

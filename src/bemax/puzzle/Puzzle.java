@@ -14,21 +14,18 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.Button;
 
 public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchListener{
 	private SurfaceView puzView;
 	private SurfaceHolder holder;
 	private Rect puzRect, picRect, markRect;
 	private boolean loop, touch;
-	private Bitmap picture, puzpic, mark;
+	private Bitmap picture, puzpic, mark, cong;
 	private Panel[] panels, map;
 	private int startX, startY, num, dx, dy;
 	private int quat, blank, mode;
-	private boolean visible;
-	static final int INIT = 0;
-	static final int MOVE = 1;
-	static final int COMP = 2;
+	private boolean visible, comp;
+	static final int INIT = 0, PLAY = 1;
 
 	public Puzzle(SurfaceView v){
 		puzView = v;
@@ -42,10 +39,11 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		mark = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.mark);
 		markRect = new Rect(0, 0, mark.getWidth(), mark.getHeight());
 
+		cong = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.cong);
+
 		panels = new Panel[16];
 		map = new Panel[16];
-		
-		mode = INIT;
+
 	}
 
 	public void run(){
@@ -55,6 +53,8 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 
 		Paint back_paint = new Paint();
 		back_paint.setAlpha(64);
+
+		Paint cong_paint = new Paint();
 
 		Rect r = new Rect(0, 0, quat, quat);
 
@@ -76,6 +76,18 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 
 			canvas.drawRect(puzRect.left, puzRect.top, puzRect.right-1, puzRect.bottom-1, frame_paint);
 
+			comp = true;
+			for(int i=0; i<map.length-1; i++){
+				if(map[i]==null || map[i].getNum()!=i){
+					comp = false;
+					break;
+				}
+			}
+
+			if(comp && mode == PLAY){
+				canvas.drawBitmap(cong, puzRect.centerX()-cong.getWidth()/2, puzRect.centerY()-cong.getHeight()/2, cong_paint);
+			}
+
 			holder.unlockCanvasAndPost(canvas);
 		}
 	}
@@ -94,7 +106,6 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		c.drawBitmap(picture, picRect, puzRect, null);
 
 		init();
-		
 		this.start();
 	}
 
@@ -198,8 +209,10 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		}
 		blank = 15;
 		visible = true;
+		comp = false;
+		mode = INIT;
 	}
-	
+
 	void shuffle(){
 		visible = false;
 		Random rd = new Random();
@@ -236,13 +249,7 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 			}
 		}
 		visible = true;
-	}
-	
-	int getMode(){
-		return mode;
-	}
-	
-	void setMode(int m){
-		mode = m;
+		comp = false;
+		mode = PLAY;
 	}
 }
