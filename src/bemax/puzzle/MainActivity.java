@@ -27,8 +27,8 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 	 * このアクティビティが作成されたとき
 	 */
     public void onCreate(Bundle savedInstanceState) {
-		Log.d("Activity-Action","Create");
-        super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);
+    	Log.d("Activity-Action","Create");
         setContentView(R.layout.activity_main);
 
         /* パズルの初期化 */
@@ -56,11 +56,11 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
      * このアクティビティが終了したとき
      */
     protected void onDestroy() {
+		super.onDestroy();
 		Log.d("Activity-Action","Destroy");
 
 		/* パズルのメインルーチンを終了させる */
 		puzzle.setLoop(false);
-		super.onDestroy();
 	}
 
 	/**
@@ -76,8 +76,7 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 	 */
 	public boolean onTouch(View v, MotionEvent event) {
 		/* ビーマックスActivityを呼び出す */
-		Intent intent = new Intent();
-		intent.setClassName("bemax.puzzle", "bemax.puzzle.BemaxActivity");
+		Intent intent = new Intent(this, BemaxActivity.class);
 		startActivity(intent);
 
 		return false;
@@ -86,27 +85,28 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 	/* アクティビティの状態をログに書き出すメソッド群 */
 
 	protected void onStart() {
-		Log.d("Activity-Action","Start");
 		super.onStart();
+		Log.d("Activity-Action","Start");
+		Log.d("puzzle",""+puzzle.getState());
 	}
 
 	protected void onStop() {
-		Log.d("Activity-Action","Stop");
 		super.onStop();
+		Log.d("Activity-Action","Stop");
 	}
 
 	protected void onPause() {
-		Log.d("Activity-Action","Pause");
 		super.onPause();
+		Log.d("Activity-Action","Pause");
 	}
 
 	protected void onRestart() {
-		Log.d("Activity-Action","Restart");
 		super.onRestart();
+		Log.d("Activity-Action","Restart");
 	}
 
 	protected void onResume() {
-		Log.d("Activity-Action","Resume");
 		super.onResume();
+		Log.d("Activity-Action","Resume");
 	}
 }
