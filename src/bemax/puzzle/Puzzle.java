@@ -78,6 +78,7 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		while(loop){
 			/* サーフェイスビューのキャンバスをロック */
 			Canvas canvas = holder.lockCanvas();
+			if(canvas == null) continue;
 
 			/* キャンバスを白で塗りつぶす */
 			canvas.drawColor(Color.WHITE);
@@ -136,16 +137,19 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		/* パズル画面の大きさを決定 */
 		puzRect = new Rect(0, 0, quat*4, quat*4);
 
-		/* パズル用画像を準備する */
-		puzpic = Bitmap.createBitmap(puzRect.width(), puzRect.height(), Config.ARGB_8888);
-		Canvas c = new Canvas(puzpic);
-		c.drawBitmap(picture, picRect, puzRect, null);
+		/* メインプログラムをスタートさせる */
+		if(this.getState()==Thread.State.NEW){
 
-		/* パズルの各パーツを初期化 */
-		init();
+			/* パズル用画像を準備する */
+			puzpic = Bitmap.createBitmap(puzRect.width(), puzRect.height(), Config.ARGB_8888);
+			Canvas c = new Canvas(puzpic);
+			c.drawBitmap(picture, picRect, puzRect, null);
 
-		/* メインプログラムスタート */
-		this.start();
+			/* パズルの各パーツを初期化 */
+			init();
+
+			this.start();
+		}
 	}
 
 	/**
@@ -159,7 +163,7 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 	 * サーフェイスビューが消去されたとき
 	 */
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		loop = false;
+
 	}
 
 	/**
@@ -364,5 +368,13 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		visible = true;	//<=パズルは表示できるよ
 		comp = false;	//<=パズルはそろってないよ
 		mode = PLAY;	//<=パズルをプレイ中だよ
+	}
+
+	/**
+	 * メインルーチンを制御するパラメータを設定する
+	 * @param b メインルーチンを終了させるときfalse
+	 */
+	void setLoop(boolean b){
+		loop = b;
 	}
 }
