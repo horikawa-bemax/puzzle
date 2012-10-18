@@ -87,7 +87,6 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 	protected void onStart() {
 		super.onStart();
 		Log.d("Activity-Action","Start");
-		Log.d("puzzle",""+puzzle.getState());
 	}
 
 	protected void onStop() {
@@ -108,5 +107,6 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 	protected void onResume() {
 		super.onResume();
 		Log.d("Activity-Action","Resume");
+		Log.d("thread",""+puzzle.getState());
 	}
 }
