@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -60,9 +59,6 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
     protected void onDestroy() {
 		super.onDestroy();
 		Log.d("Activity-Action","Destroy");
-
-		/* パズルのメインルーチンを終了させる */
-		puzzle.setLoop(false);
 	}
 
 	/**
