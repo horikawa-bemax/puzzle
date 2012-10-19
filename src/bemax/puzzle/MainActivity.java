@@ -20,7 +20,6 @@ import android.widget.ImageView;
  */
 public class MainActivity extends Activity implements OnClickListener, OnTouchListener{
 	private SurfaceView puzView;
-	private SurfaceHolder holder;
 	private ImageView bunner;
 	private Button button;
 	private Puzzle puzzle;
@@ -30,21 +29,21 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 	 */
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-    	Log.d("Activity-Action","Create");
         setContentView(R.layout.activity_main);
 
-        /* パズルの初期化 */
-        puzView = (SurfaceView)findViewById(R.id.puzzle_view);
+        /* パズルビューの初期化 */
+        //puzView = (SurfaceView)findViewById(R.id.puzzle_view);
 
         /* ボタンの初期化 */
-        button = (Button)findViewById(R.id.reset_button);
-        button.setOnClickListener(this);
+        //button = (Button)findViewById(R.id.shuffle_button);
+        //button.setOnClickListener(this);
 
         /* バナーの初期化 */
-        bunner = (ImageView)findViewById(R.id.bunner);
-        bunner.setOnTouchListener(this);
+        //bunner = (ImageView)findViewById(R.id.bunner);
+        //bunner.setOnTouchListener(this);
 
-        puzzle = new Puzzle(puzView);
+        /* パズルを作成 */
+        //puzzle = new Puzzle(puzView);
     }
 
     /**
@@ -78,6 +77,7 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 	 * バナーがタッチされたとき
 	 */
 	public boolean onTouch(View v, MotionEvent event) {
+		/* いったんパズルを終了 */
 		puzzle.setLoop(false);
 
 		/* ビーマックスActivityを呼び出す */
