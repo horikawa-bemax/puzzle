@@ -32,18 +32,18 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
         setContentView(R.layout.activity_main);
 
         /* パズルビューの初期化 */
-        //puzView = (SurfaceView)findViewById(R.id.puzzle_view);
+
 
         /* ボタンの初期化 */
-        //button = (Button)findViewById(R.id.shuffle_button);
-        //button.setOnClickListener(this);
+
+
 
         /* バナーの初期化 */
-        //bunner = (ImageView)findViewById(R.id.bunner);
-        //bunner.setOnTouchListener(this);
+
+
 
         /* パズルを作成 */
-        //puzzle = new Puzzle(puzView);
+
     }
 
     /**
