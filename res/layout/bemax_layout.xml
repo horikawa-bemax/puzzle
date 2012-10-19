@@ -19,23 +19,17 @@
         android:layout_margin="10dp"
         android:adjustViewBounds="true"
         android:src="@drawable/bemax" />
-
+
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/hpButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="ホームページを見る" />
-
+
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/fbButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="facebookを見る" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="戻る" />
 
 </LinearLayout>

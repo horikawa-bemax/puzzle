@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,8 +18,9 @@ import android.widget.ImageView;
  * メインアクティビティ
  * @author horikawa
  */
-public class MainActivity extends Activity implements OnClickListener, OnTouchListener{
+public class MainActivity extends Activity implements OnClickListener, OnTouchListener, SurfaceHolder.Callback{
 	private SurfaceView puzView;
+	private SurfaceHolder holder;
 	private ImageView bunner;
 	private Button button;
 	private Puzzle puzzle;
@@ -33,7 +35,8 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 
         /* パズルの初期化 */
         puzView = (SurfaceView)findViewById(R.id.puzzle_view);
-        puzzle = new Puzzle(puzView);
+        holder = puzView.getHolder();
+        holder.addCallback(this);
 
         /* ボタンの初期化 */
         button = (Button)findViewById(R.id.reset_button);
@@ -107,6 +110,20 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 	protected void onResume() {
 		super.onResume();
 		Log.d("Activity-Action","Resume");
-		Log.d("thread",""+puzzle.getState());
+	}
+
+	@Override
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+		puzzle = new Puzzle(puzView, width, height);
+		puzzle.start();
+	}
+
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
+	}
+
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		puzzle.setLoop(false);
 	}
 }

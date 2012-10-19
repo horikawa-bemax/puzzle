@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Bitmap.Config;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,34 +20,35 @@ import android.view.View.OnTouchListener;
  * パズルクラス
  * @author horikawa
  */
-public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchListener{
+public class Puzzle extends Thread implements OnTouchListener{
 	private SurfaceView puzView;
 	private SurfaceHolder holder;
-	private Rect puzRect, picRect, markRect;
-	private boolean loop, touch;
-	private Bitmap picture, puzpic, mark, cong;
+	private int svWidth, svHeight;
 	private Panel[] panels, map;
+	private Rect puzRect;
+	private boolean loop, touch;
 	private int startX, startY, num, dx, dy;
 	private int quat, blank, mode;
 	private boolean visible, comp;
+	private Bitmap mark;
+	private Rect markRect;
+	private Paint back_paint;
+	private Paint frame_paint;
+	private Bitmap cong;
+	private Bitmap puzpic;
 	static final int INIT = 0, PLAY = 1;
 
 	/**
 	 * コンストラクタ
 	 * @param v サーフェイスビュー
 	 */
-	public Puzzle(SurfaceView v){
-		/* パズル用ビューを受け取る */
-		puzView = v;
-
-		/* パズル用ビューがタッチに反応できるようにする */
-		holder = puzView.getHolder();
-		holder.addCallback(this);
-		puzView.setOnTouchListener(this);
+	public Puzzle(SurfaceView sv, int w, int h){
+		puzView = sv;
+		holder = sv.getHolder();
 
 		/* パズルの元になる画像をリソースから取り込む */
-		picture = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.picture);
-		picRect = new Rect(0, 0, picture.getWidth(), picture.getHeight());
+		Bitmap picture = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.picture);
+		Rect picRect = new Rect(0, 0, picture.getWidth(), picture.getHeight());
 
 		/* パズルの背景となる画像をリソースから取り込む */
 		mark = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.mark);
@@ -55,23 +57,58 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		/* パズル完成時の祝福メッセージ画像をリソースから取り込む */
 		cong = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.cong);
 
+		/* パズル用画像を準備する */
+		puzpic = Bitmap.createBitmap(puzRect.width(), puzRect.height(), Config.ARGB_8888);
+		Canvas c = new Canvas(puzpic);
+		c.drawBitmap(picture, picRect, puzRect, null);
+
 		/* パズル制御用の配列を初期化 */
 		panels = new Panel[16];
 		map = new Panel[16];
+
+		/* 枠線描画用のペイントを準備する */
+		frame_paint = new Paint();
+		frame_paint.setColor(Color.BLACK);
+		frame_paint.setStyle(Paint.Style.STROKE);
+
+		/* 背景画像描画用のペイントを準備する */
+		back_paint = new Paint();
+		back_paint.setAlpha(64);
+
+		init(w, h);
+	}
+
+	void init(int w, int h){
+		/* パネル1枚の辺の長さを決める */
+		if(w < h){
+			quat = w / 4;
+		}else{
+			quat = h / 4;
+		}
+
+		/* パズル画面の大きさを決定 */
+		puzRect = new Rect(0, 0, quat*4, quat*4);
+
+		/* パネル生成 */
+		for(int i=0; i<panels.length-1; i++){
+			Bitmap bmp = Bitmap.createBitmap(puzpic, i%4*quat, i/4*quat, quat, quat);
+			panels[i] = new Panel(i, bmp);
+			map[i] = panels[i];
+		}
+		/* ブランク位置の初期化 */
+		blank = 15;
+
+		/* パズルステータスの初期化 */
+		visible = true;	//<=パズルを表示できるよ
+		comp = false;	//<= パズルはそろってないよ
+		mode = INIT;	//<= まだゲームプレイ前だよ
 	}
 
 	/**
 	 * パズルプログラム本体
 	 */
 	public void run(){
-		/* 枠線描画用のペイントを準備する */
-		Paint frame_paint = new Paint();
-		frame_paint.setColor(Color.BLACK);
-		frame_paint.setStyle(Paint.Style.STROKE);
-
-		/* 背景画像描画用のペイントを準備する */
-		Paint back_paint = new Paint();
-		back_paint.setAlpha(64);
+		loop = true;
 
 		/* メイン処理ルーチン */
 		Rect r = new Rect(0, 0, quat, quat);
@@ -127,27 +164,12 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 	 * サーフェイスビューが変更されたとき
 	 */
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		/* パネル1枚の辺の長さを決める */
-		if(width<height){
-			quat = width / 4;
-		}else{
-			quat = height / 4;
-		}
-
-		/* パズル画面の大きさを決定 */
-		puzRect = new Rect(0, 0, quat*4, quat*4);
+		/* サーフェイスビューの大きさを記録 */
+		svWidth = width;
+		svHeight = height;
 
 		/* メインプログラムをスタートさせる */
 		if(this.getState()==Thread.State.NEW){
-
-			/* パズル用画像を準備する */
-			puzpic = Bitmap.createBitmap(puzRect.width(), puzRect.height(), Config.ARGB_8888);
-			Canvas c = new Canvas(puzpic);
-			c.drawBitmap(picture, picRect, puzRect, null);
-
-			/* パズルの各パーツを初期化 */
-			init();
-
 			this.start();
 		}
 	}
@@ -291,25 +313,6 @@ public class Puzzle extends Thread implements SurfaceHolder.Callback, OnTouchLis
 		p = map[a];
 		map[a] = map[b];
 		map[b] = p;
-	}
-
-	/**
-	 * パズルの初期化
-	 */
-	void init(){
-		/* パネル生成 */
-		for(int i=0; i<panels.length-1; i++){
-			Bitmap bmp = Bitmap.createBitmap(puzpic, i%4*quat, i/4*quat, quat, quat);
-			panels[i] = new Panel(i, bmp);
-			map[i] = panels[i];
-		}
-		/* ブランク位置の初期化 */
-		blank = 15;
-
-		/* パズルステータスの初期化 */
-		visible = true;	//<=パズルを表示できるよ
-		comp = false;	//<= パズルはそろってないよ
-		mode = INIT;	//<= まだゲームプレイ前だよ
 	}
 
 	/**
