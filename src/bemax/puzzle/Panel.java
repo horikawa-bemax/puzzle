@@ -13,7 +13,7 @@ import android.graphics.Rect;
 class Panel {
 	private int num;			// パネル番号
 	private Bitmap image;
-	private final Rect rect;
+	private Rect rect;
 	private boolean move;
 
 	/**
@@ -21,12 +21,15 @@ class Panel {
 	 * @param number パネル番号
 	 * @param img 画像データ
 	 */
-	public Panel(int number, Bitmap img){
+	public Panel(int number){
 		/* インスタンス変数初期化 */
 		num = number;
-		image = img;
-		rect = new Rect(0, 0, img.getWidth(), img.getHeight());
 		move = false;
+	}
+
+	void setImage(Bitmap b){
+		image = b;
+		rect = new Rect(0, 0, image.getWidth(), image.getHeight());
 
 		/* パネル画像に黒の枠線を描く */
 		Canvas canvas = new Canvas(image);

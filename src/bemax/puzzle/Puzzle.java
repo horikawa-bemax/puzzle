@@ -1,7 +1,6 @@
 package bemax.puzzle;
 
 import java.util.Random;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -20,10 +19,9 @@ import android.view.View.OnTouchListener;
  * パズルクラス
  * @author horikawa
  */
-public class Puzzle extends Thread implements OnTouchListener{
+public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable{
 	private SurfaceView puzView;
 	private SurfaceHolder holder;
-	private int svWidth, svHeight;
 	private Panel[] panels, map;
 	private Rect puzRect;
 	private boolean loop, touch;
@@ -36,19 +34,22 @@ public class Puzzle extends Thread implements OnTouchListener{
 	private Paint frame_paint;
 	private Bitmap cong;
 	private Bitmap puzpic;
+	private Bitmap picture;
+	private Rect picRect;
 	static final int INIT = 0, PLAY = 1;
 
 	/**
 	 * コンストラクタ
 	 * @param v サーフェイスビュー
 	 */
-	public Puzzle(SurfaceView sv, int w, int h){
+	public Puzzle(SurfaceView sv){
 		puzView = sv;
 		holder = sv.getHolder();
+		sv.setOnTouchListener(this);
 
 		/* パズルの元になる画像をリソースから取り込む */
-		Bitmap picture = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.picture);
-		Rect picRect = new Rect(0, 0, picture.getWidth(), picture.getHeight());
+		picture = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.picture);
+		picRect = new Rect(0, 0, picture.getWidth(), picture.getHeight());
 
 		/* パズルの背景となる画像をリソースから取り込む */
 		mark = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.mark);
@@ -57,28 +58,22 @@ public class Puzzle extends Thread implements OnTouchListener{
 		/* パズル完成時の祝福メッセージ画像をリソースから取り込む */
 		cong = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.cong);
 
-		/* パズル用画像を準備する */
-		puzpic = Bitmap.createBitmap(puzRect.width(), puzRect.height(), Config.ARGB_8888);
-		Canvas c = new Canvas(puzpic);
-		c.drawBitmap(picture, picRect, puzRect, null);
-
 		/* パズル制御用の配列を初期化 */
 		panels = new Panel[16];
 		map = new Panel[16];
 
-		/* 枠線描画用のペイントを準備する */
-		frame_paint = new Paint();
-		frame_paint.setColor(Color.BLACK);
-		frame_paint.setStyle(Paint.Style.STROKE);
+		/* パネル生成 */
+		for(int i=0; i<panels.length-1; i++){
+			panels[i] = new Panel(i);
+			map[i] = panels[i];
+		}
+		/* ブランク位置の初期化 */
+		blank = 15;
 
-		/* 背景画像描画用のペイントを準備する */
-		back_paint = new Paint();
-		back_paint.setAlpha(64);
-
-		init(w, h);
+		holder.addCallback(this);
 	}
 
-	void init(int w, int h){
+	public void init(int w, int h){
 		/* パネル1枚の辺の長さを決める */
 		if(w < h){
 			quat = w / 4;
@@ -89,29 +84,39 @@ public class Puzzle extends Thread implements OnTouchListener{
 		/* パズル画面の大きさを決定 */
 		puzRect = new Rect(0, 0, quat*4, quat*4);
 
+		/* パズル用画像を準備する */
+		puzpic = Bitmap.createBitmap(puzRect.width(), puzRect.height(), Config.ARGB_8888);
+		Canvas c = new Canvas(puzpic);
+		c.drawBitmap(picture, picRect, puzRect, null);
+
 		/* パネル生成 */
 		for(int i=0; i<panels.length-1; i++){
 			Bitmap bmp = Bitmap.createBitmap(puzpic, i%4*quat, i/4*quat, quat, quat);
-			panels[i] = new Panel(i, bmp);
-			map[i] = panels[i];
+			panels[i].setImage(bmp);
 		}
-		/* ブランク位置の初期化 */
-		blank = 15;
-
-		/* パズルステータスの初期化 */
-		visible = true;	//<=パズルを表示できるよ
-		comp = false;	//<= パズルはそろってないよ
-		mode = INIT;	//<= まだゲームプレイ前だよ
 	}
 
 	/**
 	 * パズルプログラム本体
 	 */
 	public void run(){
-		loop = true;
+		/* 枠線描画用のペイントを準備する */
+		frame_paint = new Paint();
+		frame_paint.setColor(Color.BLACK);
+		frame_paint.setStyle(Paint.Style.STROKE);
+
+		/* 背景画像描画用のペイントを準備する */
+		back_paint = new Paint();
+		back_paint.setAlpha(64);
+
+		/* パズルステータスの初期化 */
+		visible = true;	//<=パズルを表示できるよ
+		comp = false;	//<= パズルはそろってないよ
+		mode = INIT;	//<= まだゲームプレイ前だよ
 
 		/* メイン処理ルーチン */
 		Rect r = new Rect(0, 0, quat, quat);
+		loop = true;
 		while(loop){
 			/* サーフェイスビューのキャンバスをロック */
 			Canvas canvas = holder.lockCanvas();
@@ -158,34 +163,6 @@ public class Puzzle extends Thread implements OnTouchListener{
 			/* キャンバスのロックを解除 */
 			holder.unlockCanvasAndPost(canvas);
 		}
-	}
-
-	/**
-	 * サーフェイスビューが変更されたとき
-	 */
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		/* サーフェイスビューの大きさを記録 */
-		svWidth = width;
-		svHeight = height;
-
-		/* メインプログラムをスタートさせる */
-		if(this.getState()==Thread.State.NEW){
-			this.start();
-		}
-	}
-
-	/**
-	 * サーフェイスビューが生成されたとき
-	 */
-	public void surfaceCreated(SurfaceHolder holder) {
-		loop = true;
-	}
-
-	/**
-	 * サーフェイスビューが消去されたとき
-	 */
-	public void surfaceDestroyed(SurfaceHolder holder) {
-
 	}
 
 	/**
@@ -379,5 +356,19 @@ public class Puzzle extends Thread implements OnTouchListener{
 	 */
 	void setLoop(boolean b){
 		loop = b;
+	}
+
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+		init(width, height);
+		Thread t = new Thread(this);
+		t.start();
+	}
+
+	public void surfaceCreated(SurfaceHolder holder) {
+
+	}
+
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		loop = false;
 	}
 }

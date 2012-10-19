@@ -18,7 +18,7 @@ import android.widget.ImageView;
  * メインアクティビティ
  * @author horikawa
  */
-public class MainActivity extends Activity implements OnClickListener, OnTouchListener, SurfaceHolder.Callback{
+public class MainActivity extends Activity implements OnClickListener, OnTouchListener{
 	private SurfaceView puzView;
 	private SurfaceHolder holder;
 	private ImageView bunner;
@@ -35,8 +35,6 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 
         /* パズルの初期化 */
         puzView = (SurfaceView)findViewById(R.id.puzzle_view);
-        holder = puzView.getHolder();
-        holder.addCallback(this);
 
         /* ボタンの初期化 */
         button = (Button)findViewById(R.id.reset_button);
@@ -45,6 +43,8 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
         /* バナーの初期化 */
         bunner = (ImageView)findViewById(R.id.bunner);
         bunner.setOnTouchListener(this);
+
+        puzzle = new Puzzle(puzView);
     }
 
     /**
@@ -78,6 +78,8 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 	 * バナーがタッチされたとき
 	 */
 	public boolean onTouch(View v, MotionEvent event) {
+		puzzle.setLoop(false);
+
 		/* ビーマックスActivityを呼び出す */
 		Intent intent = new Intent(this, BemaxActivity.class);
 		startActivity(intent);
@@ -110,20 +112,5 @@ public class MainActivity extends Activity implements OnClickListener, OnTouchLi
 	protected void onResume() {
 		super.onResume();
 		Log.d("Activity-Action","Resume");
-	}
-
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		puzzle = new Puzzle(puzView, width, height);
-		puzzle.start();
-	}
-
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-	}
-
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		puzzle.setLoop(false);
 	}
 }
