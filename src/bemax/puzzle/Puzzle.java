@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Bitmap.Config;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -17,7 +16,7 @@ import android.view.View.OnTouchListener;
 
 /**
  * パズルクラス
- * @author horikawa
+ * @author Masaaki Horikawa
  */
 public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable{
 	private SurfaceView puzView;

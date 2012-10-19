@@ -16,7 +16,7 @@ import android.widget.ImageView;
 
 /**
  * メインアクティビティ
- * @author horikawa
+ * @author Masaaki Horikawa
  */
 public class MainActivity extends Activity implements OnClickListener, OnTouchListener{
 	private SurfaceView puzView;

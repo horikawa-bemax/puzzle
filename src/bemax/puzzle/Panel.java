@@ -8,7 +8,7 @@ import android.graphics.Rect;
 
 /**
  * パズルに組み込まれる一つひとつのパネルクラス
- * @author horikawa
+ * @author Masaaki Horikawa
  */
 class Panel {
 	private int num;			// パネル番号
