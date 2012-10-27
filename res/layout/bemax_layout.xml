@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="専門学校ビーマックス"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/bemax" />
+
+    <Button
+        android:id="@+id/hpButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="ホームページを見る" />
+
+    <Button
+        android:id="@+id/fbButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="facebookを見る" />
+
+</LinearLayout>

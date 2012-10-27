@@ -32,6 +32,8 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 
 		/* シャッフルボタンにリスナーを追加 */
 		button.setOnClickListener(this);
+		
+		
 	}
 
 	public void onClick(View v) {
@@ -43,7 +45,7 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 		return true;
 	}
 
-	public boolean onMenuItemClick(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch(id){
 			/* ギャラリーメニューがタッチされた時 */	
@@ -54,13 +56,17 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 				
 			/* ビーマックスメニューがタッチされた時 */
 			case R.id.bemax_menu:
-				Intent intent = new Intent();
-				
-				
+				/* ビーマックスActivityを呼び出す */
+				Intent intent = new Intent(this, BemaxActivity.class);
+				startActivity(intent);
 				break;
 				
 			default:
 		}
+		return true;
+	}
+
+	public boolean onMenuItemClick(MenuItem item) {
 		return false;
 	}
 }
