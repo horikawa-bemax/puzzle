@@ -1,5 +1,10 @@
 package bemax.puzzle;
 
+import java.util.HashMap;
+
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +20,9 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 	private SurfaceView puzView;
 	private Button button;
 	private Puzzle puzzle;
+	private SoundPool soundEffect;
+	private MediaPlayer bgmPlayer;
+	private HashMap<String, Integer> seMap;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,7 +41,12 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 		/* シャッフルボタンにリスナーを追加 */
 		button.setOnClickListener(this);
 		
-		
+		/* サウンドエフェクト初期化 */
+		soundEffect = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+		seMap = new HashMap<String, Integer>();
+		seMap.put("歓声", soundEffect.load(this, R.raw.muci_fan_10, 1));
+		seMap.put("ファンファーレ", soundEffect.load(this, R.raw.hito_ge_kansei02, 1));
+		seMap.put("bemax_menu", soundEffect.load(this, R.raw.botan_b07, 1));
 	}
 
 	public void onClick(View v) {
@@ -59,8 +72,11 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 				/* ビーマックスActivityを呼び出す */
 				Intent intent = new Intent(this, BemaxActivity.class);
 				startActivity(intent);
-				break;
 				
+				/* 効果音再生 */
+				soundEffect.play(seMap.get("bemax_menu"), 0.5f, 0.5f, 0, 0, 1);
+				
+				break;
 			default:
 		}
 		return true;
