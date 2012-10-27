@@ -6,5 +6,7 @@
     <string name="author">Masaaki Horikawa</string>
     <string name="bemax_title">専門学校ビーマックス</string>
     <string name="shuffle_btn">SHUFFLE</string>
+    <string name="gallery">ギャラリーから画像選択</string>
+    <string name="about_bemax">専門学校ビーマックスについて</string>
 
 </resources>
