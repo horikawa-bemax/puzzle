@@ -25,7 +25,7 @@ public class Fanfare extends Thread {
 		
 		/* 2秒間停止 */
 		try {
-			this.wait(2000);
+			sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
