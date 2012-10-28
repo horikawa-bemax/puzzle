@@ -22,7 +22,7 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 	private Puzzle puzzle;
 	private SoundPool soundEffect;
 	private MediaPlayer bgmPlayer;
-	private HashMap<String, Integer> seMap;
+	private HashMap<Integer, Integer> seMap;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,11 +42,9 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 		button.setOnClickListener(this);
 		
 		/* サウンドエフェクト初期化 */
-		soundEffect = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-		seMap = new HashMap<String, Integer>();
-		seMap.put("歓声", soundEffect.load(this, R.raw.muci_fan_10, 1));
-		seMap.put("ファンファーレ", soundEffect.load(this, R.raw.hito_ge_kansei02, 1));
-		seMap.put("bemax_menu", soundEffect.load(this, R.raw.botan_b07, 1));
+		soundEffect = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+		seMap = new HashMap<Integer, Integer>();
+		seMap.put(R.raw.menu, soundEffect.load(this, R.raw.menu, 1));
 	}
 
 	public void onClick(View v) {
@@ -74,7 +72,7 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 				startActivity(intent);
 				
 				/* 効果音再生 */
-				soundEffect.play(seMap.get("bemax_menu"), 0.5f, 0.5f, 0, 0, 1);
+				soundEffect.play(seMap.get(R.raw.menu), 0.5f, 0.5f, 0, 0, 1);
 				
 				break;
 			default:
