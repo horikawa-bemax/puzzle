@@ -41,6 +41,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 	private SoundPool soundPool;
 	private HashMap<Integer, Integer> seMap;
 	private Fanfare fanfare;
+	private int dimension;
 	static final int INIT = 0, PLAY = 1;
 
 	/**
@@ -63,18 +64,6 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		/* パズル完成時の祝福メッセージ画像をリソースから取り込む */
 		cong = BitmapFactory.decodeResource(puzView.getResources(), R.drawable.cong);
 
-		/* パズル制御用の配列を初期化 */
-		panels = new Panel[16];
-		map = new Panel[16];
-
-		/* パネル生成 */
-		for(int i=0; i<panels.length-1; i++){
-			panels[i] = new Panel(i);
-			map[i] = panels[i];
-		}
-		/* ブランク位置の初期化 */
-		blank = 15;
-
 		/* サーフェイスビューのコールバック設定 */
 		holder.addCallback(this);
 		
@@ -84,15 +73,30 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 	}
 
 	public void init(int w, int h){
+		dimension = 3;
+		
+		/* パズル制御用の配列を初期化 */
+		panels = new Panel[dimension*dimension];
+		map = new Panel[dimension*dimension];
+
+		/* パネル生成 */
+		for(int i=0; i<panels.length-1; i++){
+			panels[i] = new Panel(i);
+			map[i] = panels[i];
+		}
+		
+		/* ブランク位置の初期化 */
+		blank = dimension*dimension-1;
+		
 		/* パネル1枚の辺の長さを決める */
 		if(w < h){
-			quat = w / 4;
+			quat = w / dimension;
 		}else{
-			quat = h / 4;
+			quat = h / dimension;
 		}
 
 		/* パズル画面の大きさを決定 */
-		puzRect = new Rect(0, 0, quat*4, quat*4);
+		puzRect = new Rect(0, 0, quat*dimension, quat*dimension);
 
 		/* パズル用画像を準備する */
 		puzpic = Bitmap.createBitmap(puzRect.width(), puzRect.height(), Config.ARGB_8888);
@@ -101,7 +105,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 
 		/* パネル生成 */
 		for(int i=0; i<panels.length-1; i++){
-			Bitmap bmp = Bitmap.createBitmap(puzpic, i%4*quat, i/4*quat, quat, quat);
+			Bitmap bmp = Bitmap.createBitmap(puzpic, i%dimension*quat, i/dimension*quat, quat, quat);
 			panels[i].setImage(bmp);
 		}
 	}
@@ -150,9 +154,9 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 					continue;
 				}
 				if(map[i].getMove() && num==i){
-					canvas.drawBitmap(map[i].getImage(), i%4*quat + dx, i/4*quat + dy, null);
+					canvas.drawBitmap(map[i].getImage(), i%dimension*quat + dx, i/dimension*quat + dy, null);
 				}else{
-					canvas.drawBitmap(map[i].getImage(), i%4*quat, i/4*quat, null);
+					canvas.drawBitmap(map[i].getImage(), i%dimension*quat, i/dimension*quat, null);
 				}
 			}
 
@@ -208,10 +212,10 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 				/* タッチ座標から、どのパネルがタッチされたか求める */
 				int c = x / quat;
 				int r = y / quat;
-				num = r * 4 + c;
+				num = r * dimension + c;
 
 				/* タッチされたパネルが、スライドできるパネルかどうかで分ける */
-				if(num>=0 && num < 16 && num!=blank && (num-4==blank || num+1==blank || num+4==blank || num-1==blank)){
+				if(num>=0 && num < dimension*dimension && num!=blank && (num-dimension==blank || num+1==blank || num+dimension==blank || num-1==blank)){
 					/* パネルのステータスを動作中にする */
 					map[num].setMove(true);
 
@@ -231,7 +235,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 				if(map[num].getMove()){
 
 					/* パネルが上方向に移動可能である場合 */
-					if(num/4>0 && num-4==blank){
+					if(num/dimension>0 && num-dimension==blank){
 						/* 上方向への移動量を計算する */
 						if(y>startY){
 							y = startY;
@@ -243,7 +247,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 						dy = y - startY;
 					}
 					/* パネルが右方向に移動可能である場合 */
-					else	if(num%4<3  && num+1==blank){
+					else	if(num%dimension<dimension-1  && num+1==blank){
 						/* 右方向への移動量を計算する */
 						if(x<startX){
 							x = startX;
@@ -255,7 +259,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 						dy = 0;
 					}
 					/* パネルが下方向に移動可能である場合 */
-					else	if(num/4<3 && num+4==blank){
+					else	if(num/dimension<dimension-1 && num+dimension==blank){
 						/* 下方向への移動量を計算する */
 						if(y<startY){
 							y = startY;
@@ -267,7 +271,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 						dy = y - startY;
 					}
 					/* パネルが左方向に移動可能である場合 */
-					else if(num%4>0 && num-1==blank){
+					else if(num%dimension>0 && num-1==blank){
 						/* 左方向への移動量を計算する */
 						if(x>startX){
 							x = startX;
@@ -285,7 +289,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 				/* タッチが離された位置から、パネルの移動先を計算する */
 				int xx = startX + dx;
 				int yy = startY + dy;
-				int pos = yy/quat*4+xx/quat;
+				int pos = yy/quat*dimension+xx/quat;
 
 				/* パネルの移動状態を解除する */
 				map[num].setMove(false);
@@ -334,7 +338,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		for(int i=0; true; i++){
 
 			/* 200回以上入れ替え かつ ブランクが右下にあれば、シャッフルを終了 */
-			if(i>200 && blank==15){
+			if(i>dimension*dimension*100 && blank==dimension*dimension-1){
 				break;
 			}
 
@@ -345,28 +349,28 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 			switch(rn){
 				/* 上のパネルと入れ替える場合 */
 				case 0:
-					if(blank/4>0){
-						swap(blank, blank-4);
-						blank = blank - 4;
+					if(blank/dimension>0){
+						swap(blank, blank-dimension);
+						blank = blank - dimension;
 					}
 					break;
 				/* 右のパネルと入れ替える場合 */
 				case 1:
-					if(blank%4<3){
+					if(blank%dimension<dimension-1){
 						swap(blank, blank+1);
 						blank = blank + 1;
 					}
 					break;
 				/* 下のパネルと入れ替える場合 */
 				case 2:
-					if(blank/4<3){
-						swap(blank, blank+4);
-						blank = blank + 4;
+					if(blank/dimension<dimension-1){
+						swap(blank, blank+dimension);
+						blank = blank + dimension;
 					}
 					break;
 				/* 左のパネルと入れ替える場合 */
 				case 3:
-					if(blank%4>0){
+					if(blank%dimension>0){
 						swap(blank, blank-1);
 						blank = blank - 1;
 					}
