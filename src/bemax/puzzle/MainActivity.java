@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -73,6 +74,7 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 				
 				/* 効果音再生 */
 				soundEffect.play(seMap.get(R.raw.menu), 0.5f, 0.5f, 0, 0, 1);
+
 				
 				break;
 			default:

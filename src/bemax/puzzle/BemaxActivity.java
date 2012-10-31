@@ -1,7 +1,11 @@
 package bemax.puzzle;
 
+import java.util.HashMap;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +15,9 @@ import android.widget.Button;
 
 public class BemaxActivity extends Activity implements OnClickListener{
 	private Button webButton, fbButton;
+	private MediaPlayer bgmPlayer;
+	private SoundPool sePool;
+	private HashMap<Integer, Integer> seMap;
 
 	/**
 	 * コンストラクタ
@@ -46,4 +53,22 @@ public class BemaxActivity extends Activity implements OnClickListener{
 			startActivity(intent);
 		}
 	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		/* BGM初期化 */
+		bgmPlayer = MediaPlayer.create(this, R.raw.bemax_bgm);
+		bgmPlayer.setLooping(true);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		
+		bgmPlayer.stop();
+	}
+	
+	
 }

@@ -297,10 +297,10 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 					blank = num;
 					
 					/* 効果音再生 */
-					soundPool.play(seMap.get(R.raw.slide), 0.5f, 0.5f, 0, 0, 1.0f);
+					soundPool.play(seMap.get(R.raw.slide), 0.3f, 0.3f, 0, 0, 1.0f);
 				}else{
 					/* 効果音再生 */
-					soundPool.play(seMap.get(R.raw.back), 0.5f, 0.5f, 0, 0, 1.0f);
+					soundPool.play(seMap.get(R.raw.back), 0.3f, 0.3f, 0, 0, 1.0f);
 				}
 
 				/* タッチイベントをいったん終了 */
