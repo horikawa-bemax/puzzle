@@ -3,13 +3,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="専門学校ビーマックス"
+        android:text="@string/bemax_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ImageView
@@ -19,8 +19,14 @@
         android:layout_margin="10dp"
         android:adjustViewBounds="true"
         android:src="@drawable/bemax" />
-
-    <Button
+
+    <TextView
+        android:id="@+id/discription"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bemax_discription" />
+
+    <Button
         android:id="@+id/hpButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
