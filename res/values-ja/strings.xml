@@ -1,0 +1,21 @@
+<resources>
+
+    <string name="app_name">15 Puzzle</string>
+    <string name="menu_settings">設定</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="author">Masaaki Horikawa</string>
+    <string name="bemax_title">専門学校ビーマックス</string>
+    <string name="shuffle_btn">シャッフル</string>
+    <string name="gallery">ギャラリーから画像選択</string>
+    <string name="about_bemax">専門学校ビーマックスについて</string>
+    <string name="mode_3x3">8パネルモード</string>
+    <string name="mode_4x4">15パネルモード</string>
+    <string name="mode_5x5">24パネルモード</string>
+    <string name="mode_menu">モードを選ぶ</string>
+    <string name="mode_select_title">モードセレクト</string>
+    <string name="bemax_discription">岡山で楽しく学ぶ、働く!! \n専門学校ビーマックスは、創立以来35年間、岡山を拠点に、多くの意欲あふれる社会人を輩出してきました。就職に強く、人間教育にも高い評価を得ています。</string>
+    <string name="look_homepage">ホームページを見る</string>
+    <string name="look_facebook">facebookページを見る</string>
+    <string name="bemax_image_description">専門学校ビーマックス創立記念館の写真</string>
+
+</resources>

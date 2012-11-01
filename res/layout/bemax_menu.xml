@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
+    android:orientation="vertical" >
     <TextView
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
@@ -18,24 +17,23 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/bemax_image_description"
         android:src="@drawable/bemax" />
-
+
     <TextView
         android:id="@+id/discription"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/bemax_discription" />
-
-    <Button
+        android:text="@string/bemax_discription" />
+    <Button
         android:id="@+id/hpButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="ホームページを見る" />
-
+        android:text="@string/look_homepage" />
     <Button
         android:id="@+id/fbButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="facebookを見る" />
+        android:text="@string/look_facebook" />
 
 </LinearLayout>

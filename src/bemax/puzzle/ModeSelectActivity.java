@@ -32,9 +32,9 @@ public class ModeSelectActivity extends Activity implements OnItemClickListener{
 
 		/* リスト項目を追加 */
 		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-		adapter.add("3x3");
-		adapter.add("4x4");
-		adapter.add("5x5");
+		adapter.add(getString(R.string.mode_3x3));
+		adapter.add(getString(R.string.mode_4x4));
+		adapter.add(getString(R.string.mode_5x5));
 		listView.setAdapter(adapter);
 
 		/* イベントリスナを設定 */

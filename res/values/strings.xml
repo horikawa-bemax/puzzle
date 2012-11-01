@@ -4,15 +4,19 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="author">Masaaki Horikawa</string>
-    <string name="bemax_title">専門学校ビーマックス</string>
+    <string name="bemax_title">Be-MAX vocational school</string>
     <string name="shuffle_btn">SHUFFLE</string>
-    <string name="gallery">ギャラリーから画像選択</string>
-    <string name="about_bemax">専門学校ビーマックスについて</string>
-    <string name="mode_3x3">3x3</string>
-    <string name="mode_4x4">4x4</string>
-    <string name="mode_5x5">5x5</string>
-    <string name="mode_menu">モードを選ぶ</string>
-    <string name="mode_select_title">モードセレクト</string>
-    <string name="bemax_discription">岡山で楽しく学ぶ、働く!! \n専門学校ビーマックスは、創立以来35年間、岡山を拠点に、多くの意欲あふれる社会人を輩出してきました。就職に強く、人間教育にも高い評価を得ています。</string>
+    <string name="gallery">From a gallery to image selection </string>
+    <string name="about_bemax">About Be-MAX</string>
+    <string name="mode_3x3">8 panels mode</string>
+    <string name="mode_4x4">15 panels mode</string>
+    <string name="mode_5x5">24 panels mode</string>
+    <string name="mode_menu">Mode select</string>
+    <string name="mode_select_title">Mode select</string>
+    <string name="bemax_discription">It learns happily and works in Okayama!!\n Vocational school Be-Max has produced a large number of the members of society by whom it is full of much volition in Okayama at a base for 35 years since foundation.
+It is strong to employment and has obtained high evaluation also in human education. </string>
+    <string name="look_homepage">Look a Be-MAX homepage</string>
+    <string name="look_facebook">Look a Be-MAX facebook</string>
+    <string name="bemax_image_description">The photograph of a vocational school Be-MAX</string>
 
 </resources>
