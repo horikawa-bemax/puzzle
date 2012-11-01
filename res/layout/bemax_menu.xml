@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:scrollbars="none" >
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
@@ -10,30 +13,38 @@
         android:layout_margin="10dp"
         android:text="@string/bemax_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
+
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/bemax_image_margin"
+        android:layout_weight="1"
         android:adjustViewBounds="true"
         android:contentDescription="@string/bemax_image_description"
         android:src="@drawable/bemax" />
-
+
     <TextView
         android:id="@+id/discription"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/bemax_discription" />
+        android:layout_margin="@dimen/bemax_description_margin"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="vertical"
+        android:text="@string/bemax_discription" />
+
     <Button
         android:id="@+id/hpButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/look_homepage" />
+        android:layout_margin="@dimen/bemax_button_margin"
+        android:text="@string/look_homepage" />
+
     <Button
         android:id="@+id/fbButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/bemax_button_margin"
         android:text="@string/look_facebook" />
 
 </LinearLayout>

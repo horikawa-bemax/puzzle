@@ -4,23 +4,24 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="center"
         android:text="@string/mode_select_title"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/title_main" />
-
+
 <ListView
     android:id="@+id/mode_list"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:choiceMode="singleChoice"
- >
+    android:layout_height="0dp"
+    android:layout_margin="@dimen/mode_select_margin"
+    android:layout_weight="5"
+    android:choiceMode="singleChoice" >
 
 </ListView>
 
