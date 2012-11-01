@@ -8,5 +8,10 @@
     <string name="shuffle_btn">SHUFFLE</string>
     <string name="gallery">ギャラリーから画像選択</string>
     <string name="about_bemax">専門学校ビーマックスについて</string>
+    <string name="mode_3x3">3x3</string>
+    <string name="mode_4x4">4x4</string>
+    <string name="mode_5x5">5x5</string>
+    <string name="mode_menu">モードを選ぶ</string>
+    <string name="mode_select_title">モードセレクト</string>
 
 </resources>

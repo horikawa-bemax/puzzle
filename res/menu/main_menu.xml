@@ -1,6 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/gallery_menu"
-        android:title="@string/gallery"
-        android:orderInCategory="100" />
     <item android:id="@+id/bemax_menu" android:title="@string/about_bemax" android:orderInCategory="200"></item>
+    <item android:id="@+id/mode_select" android:title="@string/mode_menu" android:orderInCategory="100"></item>
 </menu>

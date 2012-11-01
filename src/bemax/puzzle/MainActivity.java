@@ -28,7 +28,7 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.main_activity);
 
 		/* パズル用ビューをレイアウトから取得 */
 		puzView = (SurfaceView)findViewById(R.id.puzzle_view);
@@ -41,7 +41,7 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 
 		/* シャッフルボタンにリスナーを追加 */
 		button.setOnClickListener(this);
-		
+
 		/* サウンドエフェクト初期化 */
 		soundEffect = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		seMap = new HashMap<Integer, Integer>();
@@ -59,23 +59,28 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
+		Intent intent;
+
 		switch(id){
-			/* ギャラリーメニューがタッチされた時 */	
-			case R.id.gallery_menu:
-				
-				
-				break;
-				
-			/* ビーマックスメニューがタッチされた時 */
-			case R.id.bemax_menu:
-				/* ビーマックスActivityを呼び出す */
-				Intent intent = new Intent(this, BemaxActivity.class);
+			/* ギャラリーメニューがタッチされた時 */
+			case R.id.mode_select:
+				intent = new Intent(this, ModeSelectActivity.class);
 				startActivity(intent);
-				
+
 				/* 効果音再生 */
 				soundEffect.play(seMap.get(R.raw.menu), 0.5f, 0.5f, 0, 0, 1);
 
-				
+				break;
+
+				/* ビーマックスメニューがタッチされた時 */
+			case R.id.bemax_menu:
+				/* ビーマックスActivityを呼び出す */
+				intent = new Intent(this, BemaxActivity.class);
+				startActivity(intent);
+
+				/* 効果音再生 */
+				soundEffect.play(seMap.get(R.raw.menu), 0.5f, 0.5f, 0, 0, 1);
+
 				break;
 			default:
 		}

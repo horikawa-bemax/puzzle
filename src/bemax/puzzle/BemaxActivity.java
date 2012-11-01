@@ -24,14 +24,14 @@ public class BemaxActivity extends Activity implements OnClickListener{
 	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		/* bemax_layout を適用する */
-		setContentView(R.layout.bemax_layout);
-		
+		setContentView(R.layout.bemax_menu);
+
 		/* ホームページへのボタンの初期設定 */
 		webButton = (Button)findViewById(R.id.hpButton);
 		webButton.setOnClickListener(this);
-		
+
 		/* facebookへのボタンの初期設定 */
 		fbButton = (Button)findViewById(R.id.fbButton);
 		fbButton.setOnClickListener(this);
@@ -57,7 +57,7 @@ public class BemaxActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
+
 		/* BGM初期化 */
 		bgmPlayer = MediaPlayer.create(this, R.raw.bemax_bgm);
 		bgmPlayer.setLooping(true);
@@ -66,9 +66,9 @@ public class BemaxActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onStop() {
 		super.onStop();
-		
+
 		bgmPlayer.stop();
 	}
-	
-	
+
+
 }
