@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.preference.PreferenceManager.OnActivityResultListener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -62,10 +63,10 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 		Intent intent;
 
 		switch(id){
-			/* ギャラリーメニューがタッチされた時 */
+			/* オプションメニューがタッチされた時 */
 			case R.id.mode_select:
 				intent = new Intent(this, ModeSelectActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, 1001);
 
 				/* 効果音再生 */
 				soundEffect.play(seMap.get(R.raw.menu), 0.5f, 0.5f, 0, 0, 1);
@@ -89,5 +90,20 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 
 	public boolean onMenuItemClick(MenuItem item) {
 		return false;
+	}
+
+	public Puzzle getPuzzle(){
+		return puzzle;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch(requestCode){
+		case 1001:
+			if(resultCode == RESULT_OK){
+				int dim = data.getIntExtra("mode", 1);
+				puzzle.setDimension(dim);
+			}
+		}
 	}
 }

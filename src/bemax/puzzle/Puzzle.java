@@ -1,5 +1,6 @@
 package bemax.puzzle;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Random;
 import android.graphics.Bitmap;
@@ -66,15 +67,18 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 
 		/* サーフェイスビューのコールバック設定 */
 		holder.addCallback(this);
-		
+
 		/* サウンドプール初期化 */
 		soundPool = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
 		seMap = new HashMap<Integer, Integer>();
+
+		dimension = 4;
 	}
 
-	public void init(int w, int h){
-		dimension = 3;
-		
+	public void init(){
+		int w = puzView.getWidth();
+		int h = puzView.getHeight();
+
 		/* パズル制御用の配列を初期化 */
 		panels = new Panel[dimension*dimension];
 		map = new Panel[dimension*dimension];
@@ -84,10 +88,10 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 			panels[i] = new Panel(i);
 			map[i] = panels[i];
 		}
-		
+
 		/* ブランク位置の初期化 */
 		blank = dimension*dimension-1;
-		
+
 		/* パネル1枚の辺の長さを決める */
 		if(w < h){
 			quat = w / dimension;
@@ -127,7 +131,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		visible = true;	//<=パズルを表示できるよ
 		comp = false;	//<= パズルはそろってないよ
 		mode = INIT;	//<= まだゲームプレイ前だよ
-		
+
 		/* サウンドエフェクト読み込み */
 		seMap.put(R.raw.fanfare, soundPool.load(puzView.getContext(), R.raw.fanfare, 1));
 		seMap.put(R.raw.kansei, soundPool.load(puzView.getContext(), R.raw.kansei, 1));
@@ -181,7 +185,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 				if(fanfare != null && fanfare.getState() == Thread.State.NEW){
 					fanfare.start();
 				}
-				
+
 				/* 祝福メッセージを表示する */
 				if(fanfare != null && fanfare.getState() != Thread.State.TERMINATED){
 					canvas.drawBitmap(cong, puzRect.centerX()-cong.getWidth()/2, puzRect.centerY()-cong.getHeight()/2, null);
@@ -299,7 +303,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 					/* パネルとブランクを入れ替える */
 					swap(num, pos);
 					blank = num;
-					
+
 					/* 効果音再生 */
 					soundPool.play(seMap.get(R.raw.slide), 0.3f, 0.3f, 0, 0, 1.0f);
 				}else{
@@ -382,7 +386,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		visible = true;	//<=パズルは表示できるよ
 		comp = false;	//<=パズルはそろってないよ
 		mode = PLAY;	//<=パズルをプレイ中だよ
-		
+
 		/* ファンファーレの準備 */
 		fanfare = new Fanfare(puzView.getContext());
 	}
@@ -395,8 +399,13 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		loop = b;
 	}
 
+	void setDimension(int n){
+		dimension = n;
+		init();
+	}
+
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		init(width, height);
+		init();
 		Thread t = new Thread(this);
 		t.start();
 	}
