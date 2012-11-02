@@ -1,14 +1,12 @@
-package bemax.puzzle;
+package sakasyo.____.puzzle;
 
 import java.util.HashMap;
-
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.preference.PreferenceManager.OnActivityResultListener;
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,9 +21,9 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 	private Button button;
 	private Puzzle puzzle;
 	private SoundPool soundEffect;
-	private MediaPlayer bgmPlayer;
 	private HashMap<Integer, Integer> seMap;
 
+	@SuppressLint("UseSparseArrays")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

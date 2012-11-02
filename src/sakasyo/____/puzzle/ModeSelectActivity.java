@@ -1,7 +1,6 @@
-package bemax.puzzle;
+package sakasyo.____.puzzle;
 
 import java.util.HashMap;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;

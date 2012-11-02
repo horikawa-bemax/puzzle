@@ -1,4 +1,4 @@
-package bemax.puzzle;
+package sakasyo.____.puzzle;
 
 import java.util.HashMap;
 import java.util.Random;
