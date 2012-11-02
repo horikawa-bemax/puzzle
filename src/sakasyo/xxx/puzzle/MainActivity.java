@@ -23,27 +23,28 @@ public class MainActivity extends Activity implements OnClickListener{
 	private Puzzle puzzle;
 	private SoundPool soundEffect;
 	private HashMap<Integer, Integer> seMap;
+	private final int MODE_SELECT_CODE = 1001;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
 
 		/* パズル用ビューをレイアウトから取得 */
-		puzView = (SurfaceView)findViewById(R.id.puzzle_view);
+
 
 		/* シャッフルボタンをレイアウトから取得 */
-		button = (Button)findViewById(R.id.reset_button);
+
 
 		/* パズルオブジェクトを初期化 */
-		puzzle = new Puzzle(puzView);
+
 
 		/* シャッフルボタンにリスナーを追加 */
-		button.setOnClickListener(this);
+
 
 		/* サウンドエフェクト初期化 */
-		soundEffect = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-		seMap = new HashMap<Integer, Integer>();
-		seMap.put(R.raw.menu, soundEffect.load(this, R.raw.menu, 1));
+
+		
+		
 	}
 
 	/**
@@ -51,9 +52,9 @@ public class MainActivity extends Activity implements OnClickListener{
 	 */
 	public void onClick(View v) {
 		/* クリックされたのがシャッフルボタンならば、puzzleをシャッフルする */
-		if(v.getId() == button.getId()){
-			puzzle.shuffle();
-		}
+
+		
+		
 	}
 
 	/**
@@ -61,7 +62,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
 		/* リソースからメニューを読み込む */
-		getMenuInflater().inflate(R.menu.main_menu, menu);
+
 		
 		return true;
 	}
@@ -74,14 +75,14 @@ public class MainActivity extends Activity implements OnClickListener{
 		Intent intent;
 
 		switch(id){
-			/* オプションメニューがタッチされた時 */
+			/* モードセレクトがタッチされた時 */
 			case R.id.mode_select:
 				/* モードセレクト画面に遷移する */
-				intent = new Intent(this, ModeSelectActivity.class);
-				startActivityForResult(intent, 1001);
+
+				
 
 				/* 効果音再生 */
-				soundEffect.play(seMap.get(R.raw.menu), 0.5f, 0.5f, 0, 0, 1);
+
 
 				break;
 			/* ビーマックスメニューがタッチされた時 */
@@ -107,17 +108,17 @@ public class MainActivity extends Activity implements OnClickListener{
 		/* 呼び出したアクティビティで分ける */
 		switch(requestCode){
 			/* モードセレクトアクティビティからの返信 */
-			case 1001:
+			case MODE_SELECT_CODE:
 				/* 返信が成功したかどうかで分ける */
-				if(resultCode == RESULT_OK){
+				if( ){
 					/* インテントからデータを取得 */
-					int dim = data.getIntExtra("mode", 1);
+					
 					
 					/* Puzzleのdimensionを更新 */
-					puzzle.setDimension(dim);
+					
 					
 					/* puzzleの初期化 */
-					puzzle.init();
+					
 				}
 				break;
 		}

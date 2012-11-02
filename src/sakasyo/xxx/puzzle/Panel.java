@@ -27,16 +27,17 @@ class Panel {
 		move = false;
 	}
 
-	void setImage(Bitmap b){
-		image = b;
+	void setImage(Bitmap img){
+		image = img;
 		rect = new Rect(0, 0, image.getWidth(), image.getHeight());
 
 		/* パネル画像に黒の枠線を描く */
-		Canvas canvas = new Canvas(image);
-		Paint paint = new Paint();
-		paint.setColor(Color.BLACK);
-		paint.setStyle(Paint.Style.STROKE);
-		canvas.drawRect(rect.left, rect.top, rect.right-1, rect.bottom-1, paint);
+		
+		
+		
+		
+		
+		
 	}
 
 	/**
