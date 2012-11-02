@@ -1,4 +1,4 @@
-package sakasyo.____.puzzle;
+package sakasyo.xxx.puzzle;
 
 import java.util.HashMap;
 import android.app.Activity;

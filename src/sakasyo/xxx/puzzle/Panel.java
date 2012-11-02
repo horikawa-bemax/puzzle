@@ -1,4 +1,4 @@
-package sakasyo.____.puzzle;
+package sakasyo.xxx.puzzle;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

@@ -1,4 +1,4 @@
-package sakasyo.____.puzzle;
+package sakasyo.xxx.puzzle;
 
 import android.app.Activity;
 import android.content.Intent;

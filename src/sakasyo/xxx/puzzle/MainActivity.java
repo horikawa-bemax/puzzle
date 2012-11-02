@@ -1,4 +1,4 @@
-package sakasyo.____.puzzle;
+package sakasyo.xxx.puzzle;
 
 import java.util.HashMap;
 import android.media.AudioManager;
@@ -8,13 +8,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class MainActivity extends Activity implements OnClickListener, OnMenuItemClickListener{
+public class MainActivity extends Activity implements OnClickListener{
 	private SurfaceView puzView;
 	private Button button;
 	private Puzzle puzzle;
@@ -67,13 +66,6 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 	 * オプションメニューが選択されたとき
 	 */
 	public boolean onOptionsItemSelected(MenuItem item) {
-		return false;
-	}
-
-	/**
-	 * メニューアイテムをクリックした時の処理
-	 */
-	public boolean onMenuItemClick(MenuItem item) {
 		int id = item.getItemId();
 		Intent intent;
 
