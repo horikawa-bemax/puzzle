@@ -1,4 +1,4 @@
-package sakasyo.xxx.puzzle;
+package bemax.puzzle;
 
 import java.util.HashMap;
 import android.media.AudioManager;

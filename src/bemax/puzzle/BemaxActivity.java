@@ -1,4 +1,4 @@
-package sakasyo.xxx.puzzle;
+package bemax.puzzle;
 
 import android.app.Activity;
 import android.content.Intent;

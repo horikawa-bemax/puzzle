@@ -1,4 +1,4 @@
-package sakasyo.xxx.puzzle;
+package bemax.puzzle;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
