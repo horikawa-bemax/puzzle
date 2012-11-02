@@ -398,22 +398,36 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		loop = b;
 	}
 
+	/**
+	 * dimensionを更新する
+	 * @param n 更新する値
+	 */
 	void setDimension(int n){
 		dimension = n;
-		init();
 	}
 
+	/**
+	 * puzViewが更新されたとき
+	 */
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+		/* puzzleを初期化 */
 		init();
-		Thread t = new Thread(this);
-		t.start();
+		
+		/* パズル開始 */
+		Thread game = new Thread(this);
+		game.start();
 	}
 
-	public void surfaceCreated(SurfaceHolder holder) {
+	/**
+	 * puzViewが新規作成されたとき
+	 */
+	public void surfaceCreated(SurfaceHolder holder) { }
 
-	}
-
+	/**
+	 * puzViewが消去されたとき
+	 */
 	public void surfaceDestroyed(SurfaceHolder holder) {
+		/* ゲームの実行を止める */
 		loop = false;
 	}
 }

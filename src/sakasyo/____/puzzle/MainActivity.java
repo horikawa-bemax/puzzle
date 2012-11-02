@@ -2,10 +2,8 @@ package sakasyo.____.puzzle;
 
 import java.util.HashMap;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
@@ -23,8 +21,6 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 	private SoundPool soundEffect;
 	private HashMap<Integer, Integer> seMap;
 
-	@SuppressLint("UseSparseArrays")
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
@@ -47,22 +43,44 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 		seMap.put(R.raw.menu, soundEffect.load(this, R.raw.menu, 1));
 	}
 
+	/**
+	 * クリックリスナ
+	 */
 	public void onClick(View v) {
-		puzzle.shuffle();
+		/* クリックされたのがシャッフルボタンならば、puzzleをシャッフルする */
+		if(v.getId() == button.getId()){
+			puzzle.shuffle();
+		}
 	}
 
+	/**
+	 * オプションメニューが作成されたときに実行される
+	 */
 	public boolean onCreateOptionsMenu(Menu menu) {
+		/* リソースからメニューを読み込む */
 		getMenuInflater().inflate(R.menu.main_menu, menu);
+		
 		return true;
 	}
 
+	/**
+	 * オプションメニューが選択されたとき
+	 */
 	public boolean onOptionsItemSelected(MenuItem item) {
+		return false;
+	}
+
+	/**
+	 * メニューアイテムをクリックした時の処理
+	 */
+	public boolean onMenuItemClick(MenuItem item) {
 		int id = item.getItemId();
 		Intent intent;
 
 		switch(id){
 			/* オプションメニューがタッチされた時 */
 			case R.id.mode_select:
+				/* モードセレクト画面に遷移する */
 				intent = new Intent(this, ModeSelectActivity.class);
 				startActivityForResult(intent, 1001);
 
@@ -70,10 +88,9 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 				soundEffect.play(seMap.get(R.raw.menu), 0.5f, 0.5f, 0, 0, 1);
 
 				break;
-
-				/* ビーマックスメニューがタッチされた時 */
+			/* ビーマックスメニューがタッチされた時 */
 			case R.id.bemax_menu:
-				/* ビーマックスActivityを呼び出す */
+				/* ビーマックス説明画面に遷移する */
 				intent = new Intent(this, BemaxActivity.class);
 				startActivity(intent);
 
@@ -83,25 +100,30 @@ public class MainActivity extends Activity implements OnClickListener, OnMenuIte
 				break;
 			default:
 		}
+		
 		return true;
 	}
 
-	public boolean onMenuItemClick(MenuItem item) {
-		return false;
-	}
-
-	public Puzzle getPuzzle(){
-		return puzzle;
-	}
-
-	@Override
+	/**
+	 * 呼び出したアクティビティから返信があった時の処理
+	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		/* 呼び出したアクティビティで分ける */
 		switch(requestCode){
-		case 1001:
-			if(resultCode == RESULT_OK){
-				int dim = data.getIntExtra("mode", 1);
-				puzzle.setDimension(dim);
-			}
+			/* モードセレクトアクティビティからの返信 */
+			case 1001:
+				/* 返信が成功したかどうかで分ける */
+				if(resultCode == RESULT_OK){
+					/* インテントからデータを取得 */
+					int dim = data.getIntExtra("mode", 1);
+					
+					/* Puzzleのdimensionを更新 */
+					puzzle.setDimension(dim);
+					
+					/* puzzleの初期化 */
+					puzzle.init();
+				}
+				break;
 		}
 	}
 }

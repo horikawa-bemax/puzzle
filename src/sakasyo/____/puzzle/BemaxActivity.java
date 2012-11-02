@@ -1,22 +1,19 @@
 package sakasyo.____.puzzle;
 
-import java.util.HashMap;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebBackForwardList;
 import android.widget.Button;
 
 public class BemaxActivity extends Activity implements OnClickListener{
 	private Button webButton, fbButton;
 	private MediaPlayer bgmPlayer;
-	private SoundPool sePool;
-	private HashMap<Integer, Integer> seMap;
+	//private SoundPool sePool;
+	//private HashMap<Integer, Integer> seMap;
 
 	/**
 	 * コンストラクタ
@@ -53,7 +50,9 @@ public class BemaxActivity extends Activity implements OnClickListener{
 		}
 	}
 
-	@Override
+	/**
+	 * アクティビティ開始時
+	 */
 	protected void onStart() {
 		super.onStart();
 
@@ -62,12 +61,13 @@ public class BemaxActivity extends Activity implements OnClickListener{
 		bgmPlayer.setLooping(true);
 	}
 
-	@Override
+	/**
+	 * アクティビティ停止時
+	 */
 	protected void onStop() {
 		super.onStop();
 
+		/* BGM停止 */
 		bgmPlayer.stop();
 	}
-
-
 }

@@ -12,6 +12,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+/**
+ * モードセレクトクラス
+ * @author Masaaki Horikawa
+ */
 public class ModeSelectActivity extends Activity implements OnItemClickListener{
 	private ListView listView;
 	private ArrayAdapter<String> adapter;
@@ -19,7 +23,9 @@ public class ModeSelectActivity extends Activity implements OnItemClickListener{
 	private SoundPool soundEffect;
 	private HashMap<Integer, Integer> seMap;
 
-	@Override
+	/**
+	 *  アクティビティ作成時
+	 */
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -40,7 +46,9 @@ public class ModeSelectActivity extends Activity implements OnItemClickListener{
 		listView.setOnItemClickListener(this);
 	}
 
-	@Override
+	/**
+	 * アクティビティスタート時
+	 */
 	protected void onStart() {
 		super.onStart();
 
@@ -48,24 +56,28 @@ public class ModeSelectActivity extends Activity implements OnItemClickListener{
 		soundEffect = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		seMap = new HashMap<Integer, Integer>();
 		seMap.put(R.raw.menu, soundEffect.load(this, R.raw.menu, 1));
-
 	}
 
-	@Override
+	/**
+	 * メニューアイテムクリック時
+	 */
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Intent intent = new Intent();
 
 		/* クリック位置に従って戻り値をセット */
 		switch(position){
-		case 0:
-			intent.putExtra("mode", 3);
-			break;
-		case 1:
-			intent.putExtra("mode", 4);
-			break;
-		case 2:
-			intent.putExtra("mode", 5);
-			break;
+			/* 8パネルモード */
+			case 0:
+				intent.putExtra("mode", 3);
+				break;
+			/* 15パネルモード */
+			case 1:
+				intent.putExtra("mode", 4);
+				break;
+			/* 24パネルモード */
+			case 2:
+				intent.putExtra("mode", 5);
+				break;
 		}
 		setResult(RESULT_OK, intent);
 
@@ -75,5 +87,4 @@ public class ModeSelectActivity extends Activity implements OnItemClickListener{
 		/* オプションメニュー終了 */
 		finish();
 	}
-
 }
