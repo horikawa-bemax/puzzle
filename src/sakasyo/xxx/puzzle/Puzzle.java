@@ -138,7 +138,6 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		seMap.put(R.raw.back, soundPool.load(puzView.getContext(), R.raw.back, 1));
 
 		/* メイン処理ルーチン */
-		Rect r = new Rect(0, 0, quat, quat);
 		loop = true;
 		while(loop){
 			/* サーフェイスビューのキャンバスをロック */
@@ -166,10 +165,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 			/* 周りの枠線を描画する */
 			canvas.drawRect(puzRect.left, puzRect.top, puzRect.right-1, puzRect.bottom-1, frame_paint);
 
-			/*
-			 * パズルが完成しているかどうか調べる
-			 * 完成していれば、compはtrueのまま抜ける
-			 */
+			/* パズルが完成しているかどうか調べる。完成していれば、compはtrueのまま抜ける */
 			comp = true;
 			for(int i=0; i<map.length-1; i++){
 				if(map[i]==null || map[i].getNum()!=i){
