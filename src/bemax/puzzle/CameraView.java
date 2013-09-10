@@ -1,7 +1,6 @@
 package bemax.puzzle;
 
 import java.io.IOException;
-import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,7 +8,6 @@ import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
-import android.support.v4.view.ViewPager.LayoutParams;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -48,29 +46,31 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback{
 		rect = new Rect(0,0,width,height);
 		if(mCamera != null){
 			Parameters mParam = mCamera.getParameters();
+			/*
 		    List<Size> sizes = mParam.getSupportedPreviewSizes();
 		    int previewWidth = width;
-		    int previewHeight = width;
+		    int previewHeight = height;
 		    int tmpHeight = 0;
 		    int tmpWidth = 0;
 		    for (Size size : sizes) {
 		        if ((size.width > previewWidth) || (size.height > previewHeight)) {
 		            continue;
 		        }
-		        if (tmpHeight < size.height) {
-		            tmpWidth = size.width;
-		            tmpHeight = size.height;
+		        if (tmpWidth < size.height) {
+		            tmpWidth = size.height;
+		            tmpHeight = size.width;
 		        }
 		    }
 		    previewWidth = tmpWidth;
 		    previewHeight = tmpHeight;
 		    Log.d("PreviewSize","w="+previewWidth+":h="+previewHeight);
-		 
-		    mParam.setPreviewSize(previewHeight, previewWidth);
+		    mParam.setPreviewSize(previewWidth, previewHeight);
+		    */
+		    Size s = mParam.getPreviewSize();
 		    
 		    ViewGroup.LayoutParams lp = getLayoutParams();
-		    lp.width = previewWidth;
-		    lp.height = previewHeight;
+		    lp.width = width;
+		    lp.height = s.width * width / s.height;
 		    setLayoutParams(lp);
 		    Log.d("LayoutSize","w="+lp.width+":h="+lp.height);
 		    
