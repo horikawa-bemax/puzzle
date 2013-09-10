@@ -1,11 +1,15 @@
 package bemax.puzzle;
 
 import java.util.HashMap;
+
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceView;
@@ -27,6 +31,9 @@ public class MainActivity extends Activity implements OnClickListener{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
+		
+		/* mediaplayerの音量を本体ボタンで可能にする */
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);  
 
 		/* パズル用ビューをレイアウトから取得 */
 		puzView = (SurfaceView)findViewById(R.id.puzzle_view);
@@ -44,8 +51,9 @@ public class MainActivity extends Activity implements OnClickListener{
 		soundEffect = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		seMap = new HashMap<Integer, Integer>();
 		seMap.put(R.raw.menu, soundEffect.load(this, R.raw.menu, 1));
+		
 	}
-
+	
 	/**
 	 * クリックリスナ
 	 */
@@ -94,6 +102,10 @@ public class MainActivity extends Activity implements OnClickListener{
 				soundEffect.play(seMap.get(R.raw.menu), 0.5f, 0.5f, 0, 0, 1);
 
 				break;
+			case R.id.camera:
+				intent = new Intent(this, CameraActivity.class);
+				startActivityForResult(intent, 2002);
+				break;
 			default:
 		}
 		
@@ -104,6 +116,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	 * 呼び出したアクティビティから返信があった時の処理
 	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.d("ResultCode",""+resultCode);
 		/* 呼び出したアクティビティで分ける */
 		switch(requestCode){
 			/* モードセレクトアクティビティからの返信 */
@@ -120,6 +133,15 @@ public class MainActivity extends Activity implements OnClickListener{
 					puzzle.init();
 				}
 				break;
+			case 2002:
+				if(resultCode == RESULT_OK){
+					Bitmap image = (Bitmap)data.getParcelableExtra("image");
+
+					if(image != null){
+						puzzle.init2(image);
+						puzzle.init();
+					}
+				}
 		}
 	}
 }

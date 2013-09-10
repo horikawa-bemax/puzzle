@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">15 Puzzle</string>
@@ -18,5 +19,11 @@ It is strong to employment and has obtained high evaluation also in human educat
     <string name="look_homepage">Look a Be-MAX homepage</string>
     <string name="look_facebook">Look a Be-MAX facebook</string>
     <string name="bemax_image_description">The photograph of a vocational school Be-MAX</string>
+    <string name="title_activity_camera">Camera mode</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="camera_shot">写真を撮る</string>
+    <string name="shuttor">SHUTTOR</string>
+    <string name="return_button">RETURN</string>
 
 </resources>

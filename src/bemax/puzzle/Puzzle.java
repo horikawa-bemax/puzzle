@@ -74,6 +74,11 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		dimension = 4;
 	}
 
+	public void init2(Bitmap img){
+		picture = img;
+		picRect = new Rect(0, 0, picture.getWidth(), picture.getHeight());
+	}
+	
 	public void init(){
 		int w = puzView.getWidth();
 		int h = puzView.getHeight();
@@ -332,49 +337,79 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		/* いったん表示を消す */
 		visible = false;	//<=パズルは表示できないよ
 
+		byte[] shcnt = new byte[dimension*dimension];
+		int[] n = {0,1,2,3};
+		shcnt[blank] = 1;
+		
 		/* ブランクと隣り合うパネルをランダムに入れ替える */
 		Random rd = new Random();
 		for(int i=0; true; i++){
-
+			int max = 0;
+			for(int j=0; j<dimension*dimension; j++){
+				if(shcnt[j] > max){
+					max = shcnt[j];
+				}
+			}
+			
 			/* 200回以上入れ替え かつ ブランクが右下にあれば、シャッフルを終了 */
-			if(i>dimension*dimension*100 && blank==dimension*dimension-1){
+			if(max > dimension*4 && blank==dimension*dimension-1){
 				break;
 			}
-
+			
 			/* ブランクと入れ替えるパネルをランダムに決定 */
-			int rn = rd.nextInt(4);
+			for(int j=0; j<4; j++){
+				int r = rd.nextInt(4);
+				int w = n[r];
+				n[r] = n[j];
+				n[j] = w;
+			}
 
 			/* 入れ替えるパネルの位置によって分ける */
-			switch(rn){
-				/* 上のパネルと入れ替える場合 */
-				case 0:
-					if(blank/dimension>0){
-						swap(blank, blank-dimension);
-						blank = blank - dimension;
-					}
-					break;
-				/* 右のパネルと入れ替える場合 */
-				case 1:
-					if(blank%dimension<dimension-1){
-						swap(blank, blank+1);
-						blank = blank + 1;
-					}
-					break;
-				/* 下のパネルと入れ替える場合 */
-				case 2:
-					if(blank/dimension<dimension-1){
-						swap(blank, blank+dimension);
-						blank = blank + dimension;
-					}
-					break;
-				/* 左のパネルと入れ替える場合 */
-				case 3:
-					if(blank%dimension>0){
-						swap(blank, blank-1);
-						blank = blank - 1;
-					}
-					break;
+			int min = 9999;
+			int minpos = -1;
+			for(int j=0; j<4; j++){
+				switch(n[j]){
+					/* 上のパネルと入れ替える場合 */
+					case 0:
+						if(blank/dimension>0){
+							if(min > shcnt[blank - dimension]){
+								min = shcnt[blank - dimension];
+								minpos = blank - dimension;
+							}
+						}
+						break;
+					/* 右のパネルと入れ替える場合 */
+					case 1:
+						if(blank%dimension<dimension-1){
+							if(min > shcnt[blank + 1]){
+								min = shcnt[blank + 1];
+								minpos = blank + 1;
+							}
+						}
+						break;
+					/* 下のパネルと入れ替える場合 */
+					case 2:
+						if(blank/dimension<dimension-1){
+							if(min > shcnt[blank + dimension]){
+								min = shcnt[blank + dimension];
+								minpos = blank + dimension;
+							}
+						}
+						break;
+					/* 左のパネルと入れ替える場合 */
+					case 3:
+						if(blank%dimension>0){
+							if(min > shcnt[blank - 1]){
+								min = shcnt[blank - 1];
+								minpos = blank - 1;
+							}
+						}
+						break;
+				}
 			}
+			swap(blank, minpos);
+			blank = minpos;
+			shcnt[blank]++;
 		}
 
 		/* パズルのステータスを初期化 */
