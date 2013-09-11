@@ -2,13 +2,12 @@ package bemax.puzzle;
 
 import java.util.HashMap;
 
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -104,6 +103,11 @@ public class MainActivity extends Activity implements OnClickListener{
 				break;
 			case R.id.camera:
 				intent = new Intent(this, CameraActivity.class);
+				Log.d("puzViewSize","w="+puzView.getWidth()+":h="+puzView.getHeight());
+				int[] size = new int[2];
+				size[0] = puzView.getWidth();
+				size[1] = puzView.getHeight();
+				intent.putExtra("aaa", size);
 				startActivityForResult(intent, 2002);
 				break;
 			default:

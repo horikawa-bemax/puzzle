@@ -18,6 +18,7 @@ public class CameraActivity extends Activity implements OnClickListener, Picture
 	CameraView mCameraView;
 	Button shuttorButton;
 	Bitmap image;
+	private int[] puzViewSize;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,9 @@ public class CameraActivity extends Activity implements OnClickListener, Picture
 		
 		shuttorButton = (Button)findViewById(R.id.shuttor_button);
 		shuttorButton.setOnClickListener(this);
+		
+		Intent intent = getIntent();
+		puzViewSize = intent.getIntArrayExtra("aaa");
 		
 		image = null;
 	}
@@ -42,13 +46,15 @@ public class CameraActivity extends Activity implements OnClickListener, Picture
 	public void onPictureTaken(byte[] data, Camera camera) {
 		try{
 		Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length, null);
-		Log.d("PicturSize","w="+b.getWidth()+":h="+b.getHeight());
+		int w  = mCameraView.rect.width();
+		int h = mCameraView.rect.height();
+		image = Bitmap.createScaledBitmap(b, w, h, false);
 		Matrix m = new Matrix();
-		m.setScale(480.0f/b.getHeight(), 480.0f/b.getHeight());
-		m.postRotate(90, 250, 250);
-		image = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), m, false);
+		m.setRotate(90);
+		image = Bitmap.createBitmap(image, 0, 0, w, h, m, false);
+		image = Bitmap.createBitmap(image, 0, 0, puzViewSize[0], puzViewSize[0]*w/h);
+		Log.d("image","w="+image.getWidth()+":h="+image.getHeight());
 		Intent intent = new Intent();
-		Log.d("ImageSize","w="+image.getWidth()+":h="+image.getHeight());
 		intent.putExtra("image", image);
 		setResult(RESULT_OK, intent);
 		finish();
