@@ -1,13 +1,17 @@
 package bemax.puzzle;
 
+import java.io.File;
 import java.util.HashMap;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -139,8 +143,13 @@ public class MainActivity extends Activity implements OnClickListener{
 				break;
 			case 2002:
 				if(resultCode == RESULT_OK){
-					Bitmap image = (Bitmap)data.getParcelableExtra("image");
-
+					File f = new File(Environment.getExternalStorageDirectory()+File.separator+"puzzle"+File.separator+"puz_bitmap.jpg");
+					Bitmap image = BitmapFactory.decodeFile(f.getPath());
+					Matrix m = new Matrix();
+					m.setScale((float)puzzle.width/image.getWidth(), (float)puzzle.height/image.getWidth());
+					m.postRotate(90);
+					image = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), m, false);
+					image = Bitmap.createBitmap(image, 0, 0, puzzle.width, puzzle.height);
 					if(image != null){
 						puzzle.init2(image);
 						puzzle.init();

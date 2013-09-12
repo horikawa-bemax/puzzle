@@ -43,6 +43,7 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 	private HashMap<Integer, Integer> seMap;
 	private Fanfare fanfare;
 	private int dimension;
+	int width, height;
 	static final int INIT = 0, PLAY = 1;
 
 	/**
@@ -445,6 +446,9 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		/* puzzleを初期化 */
 		init();
 		
+		this.width = width;
+		this.height = height;
+		
 		/* パズル開始 */
 		Thread game = new Thread(this);
 		game.start();
@@ -462,4 +466,5 @@ public class Puzzle implements OnTouchListener, SurfaceHolder.Callback, Runnable
 		/* ゲームの実行を止める */
 		loop = false;
 	}
+
 }

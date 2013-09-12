@@ -1,14 +1,16 @@
 package bemax.puzzle;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,23 +46,29 @@ public class CameraActivity extends Activity implements OnClickListener, Picture
 
 	@Override
 	public void onPictureTaken(byte[] data, Camera camera) {
+		FileOutputStream out = null;
 		try{
-		Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length, null);
-		int w  = mCameraView.rect.width();
-		int h = mCameraView.rect.height();
-		image = Bitmap.createScaledBitmap(b, w, h, false);
-		Matrix m = new Matrix();
-		m.setRotate(90);
-		image = Bitmap.createBitmap(image, 0, 0, w, h, m, false);
-		image = Bitmap.createBitmap(image, 0, 0, puzViewSize[0], puzViewSize[0]*w/h);
-		Log.d("image","w="+image.getWidth()+":h="+image.getHeight());
-		Intent intent = new Intent();
-		intent.putExtra("image", image);
-		setResult(RESULT_OK, intent);
-		finish();
+			File dir = new File(Environment.getExternalStorageDirectory()+File.separator+"puzzle");
+			if(!dir.exists()){
+				dir.mkdir();
+			}
+			out = new FileOutputStream(dir.getPath()+File.separator+"puz_bitmap.jpg");
+			out.write(data);
+			out.close();
+			Intent intent = new Intent();
+			setResult(RESULT_OK);
 		}catch(Exception e){
-			e.printStackTrace();
+			if(out != null){
+				try {
+					out.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+			setResult(2);
 		}
+
+		finish();
 	}
 
 	@Override
@@ -70,5 +78,11 @@ public class CameraActivity extends Activity implements OnClickListener, Picture
 			mCameraView.shot(this);
 			break;
 		}
+	}
+	
+	private boolean savePicture(){
+		
+		
+		return false;
 	}
 }
